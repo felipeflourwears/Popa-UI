@@ -48,7 +48,7 @@ const hexToRgb = (hex) => {
 app.post('/upload', upload.single('videoFile'), async (req, res) => {
   const color_received = req.body.color;
   const videoFile = req.file;
-  const deviceName = req.body.deviceName
+  const deviceName = req.body.device;
 
   const color = hexToRgb(color_received); // Convierte a RGB
 
@@ -71,7 +71,7 @@ app.post('/upload', upload.single('videoFile'), async (req, res) => {
     console.log('Archivo subido a S3:', s3Response);
 
     // Inserta en la base de datos
-    pool.query('INSERT INTO Media (nombreVideo, colorRGB) VALUES (?, ?)', [url, color], (err, result) => {
+    pool.query('UPDATE Media SET nombreVideo = ?, colorRGB = ?, nombreDevice = ? WHERE id = 1', [url, color, deviceName], (err, result) => {
       if (err) {
         console.error('Error inserting data:', err);
         return res.status(500).json({ error: err.message });
