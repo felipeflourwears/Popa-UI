@@ -8,6 +8,7 @@ const SelectorForm = () => {
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<DraftSelector>({
     defaultValues: {
@@ -80,6 +81,14 @@ const SelectorForm = () => {
       .then((result) => {
         console.log('Server Response:', result);
         alert('Data uploaded successfully!');
+
+        //Reset Form
+        reset({
+            deviceType: null,
+            device: null,
+            nombreVideo: null, // Resetear el archivo también
+            colorRGB: null,
+        });
       })
       .catch((error) => {
         console.error('Error uploading data:', error);
