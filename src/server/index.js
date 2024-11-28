@@ -1,22 +1,20 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import multer from 'multer'; // Use import instead of require
+import multer from 'multer'; 
 import pool from './db.js'; // Importar el pool de conexiones
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'; // Cambia a v3
-import dotenv from 'dotenv'; // Importa dotenv
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import dotenv from 'dotenv';
 
-dotenv.config({ path: '../../.env' });  // Ajusta la ruta si es necesario
+dotenv.config({ path: '../../.env' });  
 
 const upload = multer({ storage: multer.memoryStorage() });
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID; // Asegúrate de tenerlo en tu .env
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY; // Asegúrate de tenerlo en tu .env
-const bucket = process.env.AWS_NAME_BUCKET; // Asegúrate de tenerlo en tu .env
-const regionAWS = process.env.AWS_REGION; // Asegúrate de tenerlo en tu .env
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID; 
+const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+const bucket = process.env.AWS_NAME_BUCKET; 
+const regionAWS = process.env.AWS_REGION; 
 
 
-
-// Configuración de cliente S3 con AWS SDK v3
 const s3Client = new S3Client({
   region: regionAWS,
   credentials: {
@@ -25,15 +23,14 @@ const s3Client = new S3Client({
   },
 });
 
-// Crear la aplicación Express
 const app = express();
 const PORT = 5000;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json()); // Para parsear cuerpos JSON
+app.use(bodyParser.json()); 
 
-// Función para convertir hexadecimal a RGB
+
 const hexToRgb = (hex) => {
   hex = hex.replace(/^#/, '');
   const bigint = parseInt(hex, 16);
@@ -44,33 +41,30 @@ const hexToRgb = (hex) => {
   return `${r}, ${g}, ${b}`;
 };
 
-// Endpoint POST para manejar la carga de videos y colores
 app.post('/upload', upload.single('videoFile'), async (req, res) => {
   const color_received = req.body.color;
   const videoFile = req.file;
   const deviceName = req.body.device;
 
-  const color = hexToRgb(color_received); // Convierte a RGB
+  const color = hexToRgb(color_received); 
 
   console.log(`Received request to upload video: ${videoFile.originalname}, color: ${color}`); // Use originalname instead of name
 
   const url = "https://mediapopa.s3.amazonaws.com/" + videoFile.originalname;
 
-  // Configura los parámetros para subir el archivo a S3
+
   const params = {
     Bucket: bucket,
-    Key: videoFile.originalname, // Nombre del archivo en S3
-    Body: videoFile.buffer, // Contenido del archivo
-    ContentType: videoFile.mimetype, // Tipo MIME
+    Key: videoFile.originalname, 
+    Body: videoFile.buffer, 
+    ContentType: videoFile.mimetype, 
   };
 
   try {
-    // Sube el archivo a S3 usando el PutObjectCommand
     const command = new PutObjectCommand(params);
     const s3Response = await s3Client.send(command);
     console.log('Archivo subido a S3:', s3Response);
 
-    // Inserta en la base de datos
     pool.query('UPDATE Media SET nombreVideo = ?, colorRGB = ?, nombreDevice = ? WHERE id = 1', [url, color, deviceName], (err, result) => {
       if (err) {
         console.error('Error inserting data:', err);
