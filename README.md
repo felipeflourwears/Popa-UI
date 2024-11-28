@@ -15,6 +15,7 @@ npm install react-router-dom
 npm install @types/react-router-dom
 npm install react-icons ---> https://react-icons.github.io/react-icons/icons/fc/
 npm i classnames --> Multiple classnames
+npm install @headlessui/react --> https://headlessui.com/
 ```
 
 ## Expanding the ESLint configuration
