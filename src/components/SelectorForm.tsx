@@ -40,6 +40,7 @@ const SelectorForm = () => {
   const [deviceOptions, setDeviceOptions] = useState<DeviceOption[]>([]);
 
   const onSubmit = (data: DraftSelector) => {
+    console.log('Device:', data.device);
     if (!data.deviceType) {
       alert('Device type is required.');
       return;
