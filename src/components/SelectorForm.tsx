@@ -52,26 +52,23 @@ const SelectorForm = () => {
       return;
     }
   
-    // Verificar si hay un archivo de video seleccionado
     if (!data.nombreVideo) {
       alert('No video file selected.');
       return;
     }
   
-    console.log('Uploaded Video File:', data.nombreVideo.name); // Acceder al nombre del archivo
+    console.log('Uploaded Video File:', data.nombreVideo.name); 
     console.log('Device Type: ', data.deviceType.value);
     console.log('Device: ', data.device.value);
     console.log('Color: ', data.colorRGB);
   
-    // Verificar colorRGB y asignar un valor predeterminado si es null
-    const colorRGB = data.colorRGB || ''; // Asignar una cadena vacía si colorRGB es null
+    const colorRGB = data.colorRGB || ''; 
   
-    // Preparar FormData y enviar
     const formData = new FormData();
-    formData.append('videoFile', data.nombreVideo); // Usar el archivo directamente
+    formData.append('videoFile', data.nombreVideo);
     formData.append('deviceType', data.deviceType.value);
     formData.append('device', data.device.value);
-    formData.append('color', colorRGB); // Ahora colorRGB es un string
+    formData.append('color', colorRGB); 
   
     fetch('http://localhost:5000/upload', {
       method: 'POST',
@@ -86,7 +83,7 @@ const SelectorForm = () => {
         reset({
             deviceType: null,
             device: null,
-            nombreVideo: null, // Resetear el archivo también
+            nombreVideo: null, 
             colorRGB: null,
         });
       })
@@ -204,9 +201,9 @@ const SelectorForm = () => {
                     type="color"
                     id="colorRGB"
                     className="w-12 h-12 p-0 border-2 border-gray-300 rounded-full cursor-pointer"
-                    value={field.value || '#000000'} // Asignar valor predeterminado
+                    value={field.value || '#000000'} 
                     onChange={(event) => {
-                        field.onChange(event.target.value); // Actualizar el valor en el formulario
+                        field.onChange(event.target.value); 
                     }}
                     />
                 </div>
