@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom"
+import SelectorForm from "./SelectorForm"
+
 const DeviceSelector = () => {
   return (
     <div>
-        DeviceSelector
-        <Link to="/" className="underline">Dashboard</Link>
+        <SelectorForm/>
     </div>
   )
 }

@@ -16,6 +16,7 @@ npm install @types/react-router-dom
 npm install react-icons ---> https://react-icons.github.io/react-icons/icons/fc/
 npm i classnames --> Multiple classnames
 npm install @headlessui/react --> https://headlessui.com/
+npm i --save react-select --> https://react-select.com/home
 ```
 
 ## Expanding the ESLint configuration

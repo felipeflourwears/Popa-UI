@@ -6,3 +6,10 @@ export type SidebarLinkType = {
   path: string;
   icon: ReactNode;
 };
+
+export type Selector = {
+  id: string
+  deviceType: { value: string; label: string };
+}
+
+export type DraftSelector = Omit<Selector, 'id'>
