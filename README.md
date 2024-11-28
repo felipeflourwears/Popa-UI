@@ -17,6 +17,15 @@ npm install react-icons ---> https://react-icons.github.io/react-icons/icons/fc/
 npm i classnames --> Multiple classnames
 npm install @headlessui/react --> https://headlessui.com/
 npm i --save react-select --> https://react-select.com/home
+npm install aws-sdk mysql2 multer express --> Manage AWS
+npm i --save-dev @types/express
+npm i --save-dev @types/multer
+npm install cors
+npm install @types/cors --save-dev
+npm install dotenv
+npm install @types/dotenv --save-dev
+npm install ts-node typescript --save-dev
+npm install @aws-sdk/client-s3
 ```
 
 ## Expanding the ESLint configuration

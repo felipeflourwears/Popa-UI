@@ -4,7 +4,6 @@ import Layout from "./components/shared/Layout";
 import DeviceSelector from "./components/DeviceSelector";
 
 function App() {
-
   return (
     <Router>
       <Routes>

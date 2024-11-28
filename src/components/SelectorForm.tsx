@@ -1,27 +1,13 @@
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
-
-type DeviceOption = {
-  value: string;
-  label: string;
-};
-
-type DeviceMap = Record<string, DeviceOption[]>;
-
-export type DraftSelector = {
-  deviceType: DeviceOption | null;
-  device: DeviceOption | null;
-  nombreVideo: File | null; // Cambiamos el tipo a File
-  colorRGB: string | null;
-};
+import { DraftSelector, DeviceOption, DeviceMap } from '../types';
 
 const SelectorForm = () => {
   const {
     control,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<DraftSelector>({
     defaultValues: {
@@ -54,15 +40,51 @@ const SelectorForm = () => {
   const [deviceOptions, setDeviceOptions] = useState<DeviceOption[]>([]);
 
   const onSubmit = (data: DraftSelector) => {
-    if (deviceOptions.length === 0) {
-      alert('No devices available for the selected type.');
+    if (!data.deviceType) {
+      alert('Device type is required.');
       return;
     }
-    if (data.nombreVideo) {
-        console.log('Uploaded Video File:', data.nombreVideo.name);
+  
+    if (!data.device) {
+      alert('Device is required.');
+      return;
     }
-    console.log('Form Data:', data);
-  };
+  
+    // Verificar si hay un archivo de video seleccionado
+    if (!data.nombreVideo) {
+      alert('No video file selected.');
+      return;
+    }
+  
+    console.log('Uploaded Video File:', data.nombreVideo.name); // Acceder al nombre del archivo
+    console.log('Device Type: ', data.deviceType.value);
+    console.log('Device: ', data.device.value);
+    console.log('Color: ', data.colorRGB);
+  
+    // Verificar colorRGB y asignar un valor predeterminado si es null
+    const colorRGB = data.colorRGB || ''; // Asignar una cadena vacía si colorRGB es null
+  
+    // Preparar FormData y enviar
+    const formData = new FormData();
+    formData.append('videoFile', data.nombreVideo); // Usar el archivo directamente
+    formData.append('deviceType', data.deviceType.value);
+    formData.append('device', data.device.value);
+    formData.append('color', colorRGB); // Ahora colorRGB es un string
+  
+    fetch('http://localhost:5000/upload', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log('Server Response:', result);
+        alert('Data uploaded successfully!');
+      })
+      .catch((error) => {
+        console.error('Error uploading data:', error);
+        alert('Failed to upload data.');
+      });
+  };  
 
   return (
     <div className="md:w-1/2 lg:w-2/5 mx-5">
@@ -185,8 +207,6 @@ const SelectorForm = () => {
             )}
             </div>
 
-
-        {/* Submit Button */}
         <input
           type="submit"
           className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors"
