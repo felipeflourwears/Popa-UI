@@ -14,6 +14,7 @@ Currently, two official plugins are available:
 npm install react-router-dom
 npm install @types/react-router-dom
 npm install react-icons ---> https://react-icons.github.io/react-icons/icons/fc/
+npm i classnames --> Multiple classnames
 ```
 
 ## Expanding the ESLint configuration
