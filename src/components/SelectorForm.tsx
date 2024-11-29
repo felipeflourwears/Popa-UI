@@ -14,6 +14,7 @@ const SelectorForm = () => {
     defaultValues: {
       deviceType: null,
       device: null,
+      zone: null,
       nombreVideo: null,
       colorRGB: null,
     },
@@ -38,6 +39,12 @@ const SelectorForm = () => {
     IndiaPremium: [{ value: 'DR_India_Premium_1', label: 'DR India Premium 1' }],
   };
 
+  const zoneTypes: DeviceOption[] = [
+    { value: '1', label: 'Zona 1' },
+    { value: '2', label: 'Zona 2' },
+    { value: '3', label: 'Zona 3' },
+  ];
+
   const [deviceOptions, setDeviceOptions] = useState<DeviceOption[]>([]);
 
   const onSubmit = (data: DraftSelector) => {
@@ -60,6 +67,7 @@ const SelectorForm = () => {
     console.log('Uploaded Video File:', data.nombreVideo.name); 
     console.log('Device Type: ', data.deviceType.value);
     console.log('Device: ', data.device.value);
+    console.log('Zone: ', data.zone?.label);
     console.log('Color: ', data.colorRGB);
   
     const colorRGB = data.colorRGB || ''; 
@@ -68,6 +76,7 @@ const SelectorForm = () => {
     formData.append('videoFile', data.nombreVideo);
     formData.append('deviceType', data.deviceType.value);
     formData.append('device', data.device.value);
+    formData.append('zone', data.zone?.value || ''); 
     formData.append('color', colorRGB); 
   
     fetch('http://localhost:5000/upload', {
@@ -84,6 +93,7 @@ const SelectorForm = () => {
             deviceType: null,
             device: null,
             nombreVideo: null, 
+            zone: null,
             colorRGB: null,
         });
       })
@@ -160,7 +170,27 @@ const SelectorForm = () => {
           )}
         </div>
 
-         {/* Choose Media */}
+        <div className="mb-5">
+          <label htmlFor="zone" className="text-sm uppercase font-bold">
+            Select Zone
+          </label>
+          <Controller
+            name="zone"
+            control={control}
+            rules={{ required: 'Zone is required' }}
+            render={({ field }) => (
+              <Select
+                {...field}
+                options={zoneTypes}
+                placeholder="Choose a zone"
+              />
+            )}
+          />
+          {errors.zone && (
+            <p className="text-red-500 text-sm mt-2">{errors.zone.message}</p>
+          )}
+        </div>
+
         <div className="mb-5">
           <label htmlFor="nombreVideo" className="text-sm uppercase font-bold">
             Choose Media

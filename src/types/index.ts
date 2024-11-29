@@ -17,6 +17,7 @@ export type DeviceMap = Record<string, DeviceOption[]>;
 export type DraftSelector = {
   deviceType: DeviceOption | null;
   device: DeviceOption | null;
+  zone: DeviceOption | null;
   nombreVideo: File | null; // Cambiamos el tipo a File
   colorRGB: string | null;
 };
